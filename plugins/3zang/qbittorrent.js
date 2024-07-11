@@ -54,12 +54,12 @@ module.exports = async s => {
  * 登录
  */
 async function init() {
-  console.log("已连接到qbtorrent下载器:" + "开始处理请求!")
   const login = await mod.request({ url: baseURL + '/auth/login?username=' + username + '&password=' + passwd, dataType: "json" })
   var cookieStr = JSON.stringify(login.headers['set-cookie'])
   const cookie = JSON.parse(cookieStr)[0]
   headers = { 'Cookie': cookie };
   qb.set("headers", headers)
+  console.log("已连接到qbtorrent下载器:" + "开始处理请求!")
 }
 
 
