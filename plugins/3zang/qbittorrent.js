@@ -51,8 +51,9 @@ module.exports = async s => {
   //登录
   await init()
   headers = await qb.get("headers")
-  const keyword = s.param(1) + "";
-  if (keyword.match(/magnet/)) {
+  var keyword = s.param(1) + "";
+  console.log("输入:", keyword)
+  if (keyword.match(/xt=urn/)) {
     keyword = "magnet:" + keyword
     let add = await addMagnet({ urls: keyword, savepath: savepath })
     if (add == true) {
@@ -74,20 +75,28 @@ module.exports = async s => {
  * 登录
  */
 async function init() {
-  const login = await axios.post(baseURL + '/auth/login', qs.stringify({username:`${userName}`,password:`${passwd}`}), { headers: headers })
+  const login = await axios.post(baseURL + '/auth/login', qs.stringify({ username: `${userName}`, password: `${passwd}` }))
+  const dataStr = JSON.stringify(login.data)
+  const data = JSON.parse(dataStr)
+  console.log("登录结果:", data)
   var cookieStr = JSON.stringify(login.headers['set-cookie'])
   const cookie = JSON.parse(cookieStr)[0]
-  headers = { 'Cookie': cookie };
+  headers = { 'Cookie': cookie.split(";")[0] };
   qb.set("headers", headers)
-  console.log(`使用:${cookie} 连接到qbtorrent下载器,开始处理请求!`)
+  console.log(`使用Cookie:${headers.Cookie} 连接到qbtorrent下载器,开始处理请求!`)
 }
 /**
  * 添加磁力
  */
 async function addMagnet(data) {
   var success = false
-  var res = await mod.request({ url: baseURL + "/torrents/add?urls=" + data.urls + "&autoTMM=false&" + "savepath=" + data.savepath, headers: headers })
-  if (res.body.match(/Ok/)) {
+  let formData = new FormData();
+  formData.append('urls',data.urls);
+  formData.append('savepath',data.savepath)
+  formData.append('upLimit', 10240)
+  var res = await axios.post(baseURL + "/torrents/add", formData,{ headers: headers })
+  console.log("添加种子:",res.data)
+  if (res.data.match(/Ok/)) {
     success = true
   }
   return success
@@ -108,13 +117,13 @@ async function downloading() {
       torrent.id = i + 1
       const progess = down_loading[i].progress;
       torrent.progess = "进度: " + (progess * 100).toString().substring(0, 4) + "%"
-      console.log(torrent.name, " : ", torrent.progess)
+      console.log("下载中 : "+torrent.name, " : ", torrent.progess)
       torrent.hash = down_loading[i].hash
       torrent.path = down_loading[i].save_path
       torrents.push(torrent)
       if (torrent.path.match(savepath)) {
         //限制上传速度
-        setUploadLimit(torrent.hash)
+        //setUploadLimit(torrent.hash)
       }
       ok += torrent.id + ". " + torrent.name + '  ' + torrent.progess + '\n';
     }
