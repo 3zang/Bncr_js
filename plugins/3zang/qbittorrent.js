@@ -1,6 +1,5 @@
 /**
  * @author 3zang
- * @origin 3zang
  * @name qbittorrent
  * @team 3zang
  * @version 1.0.0
