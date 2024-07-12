@@ -1,4 +1,3 @@
-
 /**
  * @author 3zang
  * @origin 3zang
@@ -14,20 +13,41 @@
  * @disable false
  * @classification ["娱乐"]
  */
+/* 配置构造器 */
+const jsonSchema = BncrCreateSchema.object({
+  enable: BncrCreateSchema.boolean().setTitle('是否开启Qbit').setDescription(`设置false则不启用`).setDefault(false),
+  baseURL: BncrCreateSchema.string().setTitle('地址').setDescription(`qbittorrent的地址和端口`).setDefault('http://192.168.0.47:1234'),
+  userName: BncrCreateSchema.string().setTitle('账号').setDescription(`账号`).setDefault('Yanshen'),
+  password: BncrCreateSchema.string().setTitle('密码').setDescription(`密码`).setDefault('678901'),
+  savePath: BncrCreateSchema.string().setTitle('保存路径').setDescription(`添加种子时的保存路径`).setDefault('/nas/监听')
+});
 const mod = require('./mod/http')
 const moment = require('moment');
 const axios = require('axios')
 const qs = require('qs')
-const baseURL = 'http://192.168.0.47:1234/api/v2'    //只需要更换ip和端口
 const qb = new BncrDB("qbittorent")
-//账号
-const username = "Yanshen"
-//密码
-const passwd = "678901"
-//监听的保存路径
-const savepath = "/nas/监听"
-let headers;
+/* 配置管理器 */
+const ConfigDB = new BncrPluginConfig(jsonSchema)
+
+var { baseURL, userName, passwd, savepath, headers } = ''
+//初始化
+!(async () => {
+  await ConfigDB.get();
+  baseURL = ConfigDB.userConfig.baseURL + "/api/v2" || ""
+  //账号
+  userName = ConfigDB.userConfig.userName || "";
+  //密码
+  passwd = ConfigDB.userConfig.password || "";
+  //监听的保存路径
+  savepath = ConfigDB.userConfig.savePath || "";
+})().catch((e) => console.log(e)).finally();
+
 module.exports = async s => {
+  /* 如果用户未配置,userConfig则为空对象{} */
+  if (!Object.keys(ConfigDB.userConfig).length) {
+    sysMethod.startOutLogs('未配置Qbittorrent,退出.');
+    return;
+  }
   //登录
   await init()
   headers = await qb.get("headers")
@@ -44,9 +64,9 @@ module.exports = async s => {
   const down = await downloading()
   const download = "正在下载:\n" + down.down + "\n"
   const dsped = await downspeed()
-  const msg = "下载速度 : " + dsped.d_speed + "\n上传速度 : " + dsped.u_speed +"\n累计下载 : " + dsped.dl_info + "\n累计上传 : " + dsped.up_info + ""
+  const msg = "下载速度 : " + dsped.d_speed + "\n上传速度 : " + dsped.u_speed + "\n累计下载 : " + dsped.dl_info + "\n累计上传 : " + dsped.up_info + ""
   const diskinfo = await diskSpace()
-  const replyText= (download + msg + "\n"+diskinfo)
+  const replyText = (download + msg + "\n" + diskinfo)
   await s.reply(replyText)
 }
 
@@ -54,15 +74,13 @@ module.exports = async s => {
  * 登录
  */
 async function init() {
-  const login = await mod.request({ url: baseURL + '/auth/login?username=' + username + '&password=' + passwd, dataType: "json" })
+  const login = await mod.request({ url: baseURL + '/auth/login?username=' + userName + '&password=' + passwd, dataType: "json" })
   var cookieStr = JSON.stringify(login.headers['set-cookie'])
   const cookie = JSON.parse(cookieStr)[0]
   headers = { 'Cookie': cookie };
   qb.set("headers", headers)
-  console.log("已连接到qbtorrent下载器:" + "开始处理请求!")
+  console.log(`使用:${cookie} 连接到qbtorrent下载器,开始处理请求!`)
 }
-
-
 /**
  * 添加磁力
  */
@@ -90,7 +108,7 @@ async function downloading() {
       torrent.id = i + 1
       const progess = down_loading[i].progress;
       torrent.progess = "进度: " + (progess * 100).toString().substring(0, 4) + "%"
-      console.log(torrent.name," : ",torrent.progess)
+      console.log(torrent.name, " : ", torrent.progess)
       torrent.hash = down_loading[i].hash
       torrent.path = down_loading[i].save_path
       torrents.push(torrent)
@@ -117,7 +135,7 @@ async function setUploadLimit(hash) {
   const hashInfo = await torrentHashInfo(hash)
   let reqUrl = baseURL + "/torrents/setUploadLimit"
   let body = { hashes: hash, limit: 10240 }
-  console.log("限制: ",  hashInfo.data.torrent,"上传速度:",body.limit/1024 +"Kb" )
+  console.log("限制: ", hashInfo.data.torrent, "上传速度:", body.limit / 1024 + "Kb")
   let data = await axios.post(reqUrl, qs.stringify(body), { headers: headers })
 }
 
@@ -125,7 +143,7 @@ async function setUploadLimit(hash) {
  * 磁盘空间
  */
 async function diskSpace() {
-  let res = await axios.post(baseURL + "/sync/maindata?rid=0&l8gxujbi",null,{headers: headers})
+  let res = await axios.post(baseURL + "/sync/maindata?rid=0&l8gxujbi", null, { headers: headers })
   const data = JSON.parse(JSON.stringify(res.data))
   let server_state = data.server_state
   if (server_state) {
@@ -184,10 +202,10 @@ async function downspeed() {
     let u_speed = data.up_info_speed / m
     let dl_info = data.dl_info_data / n
     let up_info = data.up_info_data / n
-    msg["d_speed"] = d_speed.toString().substring(0, 4) + " MB/s"
-    msg["u_speed"] = u_speed.toString().substring(0, 4) + " MB/s"
-    msg["dl_info"] = dl_info.toString().substring(0, 6) + " GB"
-    msg["up_info"] = up_info.toString().substring(0, 6) + " GB"
+    msg.d_speed = d_speed.toString().substring(0, 4) + " MB/s"
+    msg.u_speed = u_speed.toString().substring(0, 4) + " MB/s"
+    msg.dl_info = dl_info.toString().substring(0, 6) + " GB"
+    msg.up_info = up_info.toString().substring(0, 6) + " GB"
   }
   return msg
 }
@@ -234,7 +252,7 @@ async function torrentHashInfo(hash) {
 /**
  *文件大小转换
  */
-function formatBytes(bytes) {
+async function formatBytes(bytes) {
   const MiB = 1024 * 1024;
   const GiB = 1024 * 1024 * 1024;
 
@@ -248,7 +266,7 @@ function formatBytes(bytes) {
 /**
  *秒转换
  */
-function formatSeconds(seconds) {
+async function formatSeconds(seconds) {
   const SECONDS_IN_MINUTE = 60;
   const MINUTES_IN_HOUR = 60;
   const HOURS_IN_DAY = 24;
