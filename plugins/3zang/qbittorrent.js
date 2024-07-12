@@ -12,7 +12,6 @@
  * @disable false
  * @classification ["娱乐"]
  */
-/* 配置构造器 */
 const jsonSchema = BncrCreateSchema.object({
   enable: BncrCreateSchema.boolean().setTitle('是否开启Qbit').setDescription(`设置false则不启用`).setDefault(false),
   baseURL: BncrCreateSchema.string().setTitle('地址').setDescription(`qbittorrent的地址和端口`).setDefault('http://192.168.0.47:1234'),
