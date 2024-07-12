@@ -74,7 +74,7 @@ module.exports = async s => {
  * 登录
  */
 async function init() {
-  const login = await mod.request({ url: baseURL + '/auth/login?username=' + userName + '&password=' + passwd, dataType: "json" })
+  const login = await axios.post(baseURL + '/auth/login', qs.stringify({username:`${userName}`,password:`${passwd}`}), { headers: headers })
   var cookieStr = JSON.stringify(login.headers['set-cookie'])
   const cookie = JSON.parse(cookieStr)[0]
   headers = { 'Cookie': cookie };
