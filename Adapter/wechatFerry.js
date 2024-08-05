@@ -20,7 +20,6 @@ const jsonSchema = BncrCreateSchema.object({
 });
 /* 配置管理器 */
 const ConfigDB = new BncrPluginConfig(jsonSchema);
-
 module.exports = async () => {
   /* 读取用户配置 */
   await ConfigDB.get();
