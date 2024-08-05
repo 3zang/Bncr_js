@@ -1,6 +1,6 @@
 /**
  * This file is part of the Bncr project.
- * @author 3sang
+ * @author 3zang
  * @name wechatFerry
  * @origin 3zang
  * @team 3zang
