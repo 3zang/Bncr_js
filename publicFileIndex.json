@@ -1,9 +1,9 @@
 {
   "annotation": "该文件由系统自动生成. 用于插件市场索引,请勿编辑该文件中的任何内容",
-  "cqAo+K+YBJ9cYl3N2C7ZiO3hrHY=": {
+  "7pS6h6sD/BQNrfnkbAbVkPYU9DE=": {
     "type": "github",
     "name": "wechatFerry",
-    "author": "3sang",
+    "author": "3zang",
     "team": "3zang",
     "version": "1.0.0",
     "description": "wechatFerry适配器",
@@ -19,7 +19,7 @@
     "isService": false,
     "isAuthentication": false,
     "isEncPlugin": false,
-    "id": "cqAo+K+YBJ9cYl3N2C7ZiO3hrHY=",
+    "id": "7pS6h6sD/BQNrfnkbAbVkPYU9DE=",
     "isChatPlugin": false
   },
   "U5bujdwlz96jsBC4XKvirZZldf0=": {
