@@ -7,10 +7,11 @@
  * @version 1.0.0
  * @description wechatFerry适配器
  * @adapter true
- * @public false
+ * @public true
  * @disable false
  * @priority 2
  * @Copyright ©2024 3zang. All rights reserved
+ * @classification ["娱乐"]
  * Unauthorized copying of this file, via any medium is strictly prohibited
  */
 /* 配置构造器 */
