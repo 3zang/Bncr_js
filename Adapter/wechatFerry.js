@@ -128,6 +128,7 @@ module.exports = async () => {
       })
     ).body;
   }
+
   /* 获取windows文件路径 */
   async function getLocalPath(url, type) {
     let req = { url: url, type: type }
