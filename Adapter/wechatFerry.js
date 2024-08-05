@@ -3,6 +3,7 @@
  * @author 3sang
  * @name wechatFerry
  * @origin 3zang
+ * @team 3zang
  * @version 1.0.0
  * @description wechatFerry适配器
  * @adapter true
