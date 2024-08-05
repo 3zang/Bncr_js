@@ -75,7 +75,6 @@ module.exports = async () => {
       res.send({ status: 400, data: '', msg: e.toString() });
     }
   });
-
   wechatFerry.reply = async function (replyInfo) {
     //console.log('replyInfo', replyInfo);
     let body = null;
