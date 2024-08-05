@@ -1,0 +1,25 @@
+{
+  "annotation": "该文件由系统自动生成. 用于插件市场索引,请勿编辑该文件中的任何内容",
+  "U5bujdwlz96jsBC4XKvirZZldf0=": {
+    "type": "github",
+    "name": "qbittorrent",
+    "author": "3zang",
+    "team": "3zang",
+    "version": "1.0.0",
+    "description": "qbtitorrent下载器",
+    "classification": [
+      "娱乐"
+    ],
+    "filename": "qbittorrent.js",
+    "fileDir": "/plugins/3zang/qbittorrent.js",
+    "systemVersionRange": "",
+    "isCron": false,
+    "isAdapter": false,
+    "isMod": false,
+    "isService": false,
+    "isAuthentication": false,
+    "isEncPlugin": false,
+    "id": "U5bujdwlz96jsBC4XKvirZZldf0=",
+    "isChatPlugin": true
+  }
+}
