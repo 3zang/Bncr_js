@@ -27,7 +27,7 @@ jobs:
 
       - name: 提交并推送更改
         run: |
-          git config --global user.name 'github-actions[bot]'
+          git config --global user.name '3zang'
           git config --global user.email '<134578272+3zang@users.noreply.github.com>'
           git add publicFileIndex.json
           git commit -m '由Actions自动生成插件市场所需JSON索引'
