@@ -1,5 +1,27 @@
 {
   "annotation": "该文件由系统自动生成. 用于插件市场索引,请勿编辑该文件中的任何内容",
+  "cqAo+K+YBJ9cYl3N2C7ZiO3hrHY=": {
+    "type": "github",
+    "name": "wechatFerry",
+    "author": "3sang",
+    "team": "3zang",
+    "version": "1.0.0",
+    "description": "wechatFerry适配器",
+    "classification": [
+      "娱乐"
+    ],
+    "filename": "wechatFerry.js",
+    "fileDir": "/Adapter/wechatFerry.js",
+    "systemVersionRange": "",
+    "isCron": false,
+    "isAdapter": true,
+    "isMod": false,
+    "isService": false,
+    "isAuthentication": false,
+    "isEncPlugin": false,
+    "id": "cqAo+K+YBJ9cYl3N2C7ZiO3hrHY=",
+    "isChatPlugin": false
+  },
   "U5bujdwlz96jsBC4XKvirZZldf0=": {
     "type": "github",
     "name": "qbittorrent",
