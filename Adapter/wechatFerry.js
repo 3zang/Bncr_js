@@ -102,6 +102,7 @@ module.exports = async () => {
         body = {
           receiver: to_Wxid,
           path: fileServer ? await getLocalPath(replyInfo.path, "video") : replyInfo.path,
+          surfix: "mp4",
           api: 'file',
         };
         break;
@@ -118,7 +119,10 @@ module.exports = async () => {
   wechatFerry.push = async function (replyInfo) {
     return this.reply(replyInfo);
   };
-
+  // 伪装消息
+  wechatFerry.inlinemask = async function (msgInfo) {
+    return wechatFerry.receive(msgInfo);
+  };
   /* 发送消息请求体 */
   async function requestFerry(body) {
     return (
