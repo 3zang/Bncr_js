@@ -102,7 +102,7 @@ module.exports = async () => {
         body = {
           receiver: to_Wxid,
           path: fileServer ? await getLocalPath(replyInfo.path, "video") : replyInfo.path,
-          surfix: "mp4",
+          suffix: "mp4",
           api: 'file',
         };
         break;
