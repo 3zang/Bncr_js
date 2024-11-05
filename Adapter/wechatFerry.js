@@ -4,7 +4,7 @@
  * @name wechatFerry
  * @origin 3zang
  * @team 3zang
- * @version 1.0.0
+ * @version 1.0.1
  * @description wechatFerry适配器 wcf微信地址:https://github.com/lich0821/WeChatFerry/releases/tag/v39.0.14
  * @adapter true
  * @public true
